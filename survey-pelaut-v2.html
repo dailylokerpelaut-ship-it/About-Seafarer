@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suara Pelaut Indonesia — Daily Loker Pelaut Survey 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@300;400;600;700;800&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:     #06101e;
+    --bg2:    #0b1c34;
+    --card:   #0f2347;
+    --gold:   #e8a523;
+    --gold2:  #ffd166;
+    --teal:   #1fb8a0;
+    --blue:   #3a9bd5;
+    --red:    #e05c5c;
+    --text:   #dde6f0;
+    --muted:  #7a93ae;
+    --border: rgba(255,255,255,0.07);
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 80px 24px 60px; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 55% at 50% 0%, rgba(58,155,213,0.2) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(31,184,160,0.12) 0%, transparent 60%),
+      linear-gradient(180deg, #06101e 0%, #0a1a30 100%);
+    z-index: 0;
+  }
+  .wave-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(58,155,213,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(58,155,213,0.04) 1px, transparent 1px);
+    background-size: 60px 60px; z-index: 0;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 840px; }
+
+  .brand-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text); font-size: 13px; font-weight: 700;
+    padding: 8px 20px; border-radius: 100px; margin-bottom: 32px;
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 11vw, 116px);
+    line-height: 0.93; letter-spacing: 1px; color: #fff;
+    animation: fadeUp 0.85s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 17px; color: var(--muted); margin-top: 22px;
+    max-width: 560px; margin-inline: auto; font-weight: 400;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  /* Pain-point hero highlights */
+  .hero-pain {
+    display: flex; flex-wrap: wrap; gap: 12px;
+    justify-content: center; margin-top: 44px;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+  .pain-chip {
+    background: rgba(232,165,35,0.08);
+    border: 1px solid rgba(232,165,35,0.22);
+    color: var(--gold2); font-size: 13px; font-weight: 700;
+    padding: 8px 18px; border-radius: 100px;
+  }
+  .pain-chip.t { background: rgba(31,184,160,0.08); border-color: rgba(31,184,160,0.22); color: var(--teal); }
+  .pain-chip.b { background: rgba(58,155,213,0.08); border-color: rgba(58,155,213,0.22); color: var(--blue); }
+  .pain-chip.r { background: rgba(224,92,92,0.08); border-color: rgba(224,92,92,0.22); color: var(--red); }
+
+  .scroll-hint {
+    margin-top: 56px; font-size: 12px; color: var(--muted);
+    letter-spacing: 2px; text-transform: uppercase;
+    animation: fadeUp 1s 0.5s ease both, pulse 2.2s 1.5s infinite;
+  }
+
+  /* ─── PAIN BANNER ─── */
+  .pain-banner {
+    background: linear-gradient(135deg, rgba(224,92,92,0.08), rgba(232,165,35,0.06));
+    border-top: 1px solid rgba(224,92,92,0.18); border-bottom: 1px solid rgba(224,92,92,0.18);
+    padding: 60px 24px;
+  }
+  .pain-banner-inner { max-width: 1100px; margin: 0 auto; }
+  .pain-banner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2px; }
+  .pain-stat {
+    text-align: center; padding: 32px 20px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .pain-stat:last-child { border-right: none; }
+  .pain-stat .pnum {
+    font-family: 'Bebas Neue', sans-serif; font-size: 72px;
+    line-height: 1; color: #fff;
+  }
+  .pain-stat .pnum.red { color: var(--red); }
+  .pain-stat .pnum.gold { color: var(--gold); }
+  .pain-stat .pnum.teal { color: var(--teal); }
+  .pain-stat .ptxt { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-top: 6px; }
+  .pain-stat .psub { font-size: 12px; color: var(--muted); opacity: 0.6; margin-top: 4px; }
+
+  /* ─── SECTIONS ─── */
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 80px 24px; }
+  .wrap.tight { padding-top: 48px; }
+
+  .sec-eyebrow {
+    font-family: 'Oswald', sans-serif; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .sec-eyebrow::before { content: ''; width: 28px; height: 2px; background: currentColor; display: block; }
+  .sec-eyebrow.gold { color: var(--gold); }
+  .sec-eyebrow.teal { color: var(--teal); }
+  .sec-eyebrow.blue { color: var(--blue); }
+
+  .sec-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 6vw, 62px);
+    line-height: 1; color: #fff; margin-bottom: 10px; letter-spacing: 1px;
+  }
+  .sec-desc { color: var(--muted); max-width: 600px; font-size: 15px; margin-bottom: 44px; }
+
+  /* ─── BIG PAIN CARDS ─── */
+  .big-pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .big-pain-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 18px; padding: 32px 28px;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .big-pain-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.14); }
+  .big-pain-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px; background: var(--accent, var(--gold));
+  }
+  .big-pain-card .icon { font-size: 32px; margin-bottom: 16px; display: block; }
+  .big-pain-card .pct {
+    font-family: 'Bebas Neue', sans-serif; font-size: 64px;
+    line-height: 1; color: var(--accent, var(--gold));
+  }
+  .big-pain-card .label { font-size: 14px; font-weight: 800; color: #fff; margin-top: 8px; }
+  .big-pain-card .note { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+
+  /* ─── CHART GRID ─── */
+  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; margin-bottom: 32px; }
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px; }
+  .chart-card.wide { grid-column: 1 / -1; }
+  .chart-title { font-family: 'Oswald', sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .chart-wrap { position: relative; height: 240px; }
+  .chart-wrap.md { height: 280px; }
+
+  /* ─── HBARS ─── */
+  .hbar-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .hbar-header { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 7px; font-weight: 700; }
+  .hbar-pct { font-family: 'Oswald', sans-serif; font-size: 15px; color: var(--gold); }
+  .hbar-pct.t { color: var(--teal); }
+  .hbar-track { background: rgba(255,255,255,0.05); border-radius: 4px; height: 9px; overflow: hidden; }
+  .hbar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--gold), var(--gold2)); width: 0; transition: width 1.3s cubic-bezier(0.22, 1, 0.36, 1); }
+  .hbar-fill.t { background: linear-gradient(90deg, var(--teal), #4dd6c4); }
+  .hbar-fill.b { background: linear-gradient(90deg, var(--blue), #6ab9e8); }
+  .hbar-fill.r { background: linear-gradient(90deg, var(--red), #f09090); }
+
+  /* ─── QUOTE BLOCK ─── */
+  .quote-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .quote-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 28px; position: relative;
+  }
+  .quote-card::before { content: '"'; font-family: 'Bebas Neue', sans-serif; font-size: 80px; line-height: 0.7; color: rgba(232,165,35,0.15); position: absolute; top: 20px; left: 20px; }
+  .quote-card p { font-size: 14px; color: var(--text); line-height: 1.7; padding-top: 24px; font-style: italic; }
+  .quote-card .qtag { font-size: 11px; color: var(--muted); margin-top: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; font-style: normal; }
+
+  /* ─── HIGHLIGHT ─── */
+  .highlight {
+    border-radius: 20px; padding: 40px 44px; margin-bottom: 40px;
+    display: flex; align-items: center; gap: 36px; flex-wrap: wrap;
+  }
+  .highlight.g { background: linear-gradient(135deg, rgba(232,165,35,0.09), rgba(31,184,160,0.06)); border: 1px solid rgba(232,165,35,0.22); }
+  .highlight.t { background: linear-gradient(135deg, rgba(31,184,160,0.08), rgba(58,155,213,0.06)); border: 1px solid rgba(31,184,160,0.22); }
+  .h-num { font-family: 'Bebas Neue', sans-serif; font-size: 100px; line-height: 1; flex-shrink: 0; }
+  .h-num.g { color: var(--gold); }
+  .h-num.t { color: var(--teal); }
+  .h-body h3 { font-family: 'Oswald', sans-serif; font-size: 22px; color: #fff; margin-bottom: 10px; letter-spacing: 1px; }
+  .h-body p { color: var(--muted); font-size: 14px; max-width: 460px; line-height: 1.7; }
+
+  /* ─── DIVIDER ─── */
+  .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent); }
+
+  /* ─── ENGINE BG ─── */
+  .engine-bg { background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%); }
+
+  /* ─── PILL ─── */
+  .pills { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; }
+  .pill { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); font-size: 13px; padding: 6px 16px; border-radius: 100px; font-weight: 700; }
+  .pill.g { background: rgba(232,165,35,0.1); border-color: rgba(232,165,35,0.3); color: var(--gold); }
+  .pill.t { background: rgba(31,184,160,0.1); border-color: rgba(31,184,160,0.3); color: var(--teal); }
+
+  /* ─── CTA ─── */
+  .cta-section { background: #060f1c; border-top: 1px solid var(--border); padding: 100px 24px; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(31,184,160,0.13) 0%, transparent 70%); }
+  .cta-inner { position: relative; z-index: 1; }
+  .cta-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 8vw, 76px); color: #fff; line-height: 1; margin-bottom: 18px; }
+  .cta-section p { color: var(--muted); max-width: 520px; margin: 0 auto 44px; font-size: 16px; line-height: 1.7; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: linear-gradient(135deg, var(--teal), #138f7a);
+    color: #fff; font-family: 'Oswald', sans-serif; font-size: 18px;
+    letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+    padding: 20px 48px; border-radius: 100px;
+    box-shadow: 0 8px 36px rgba(31,184,160,0.32);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-4px); box-shadow: 0 18px 52px rgba(31,184,160,0.48); }
+  .cta-note { margin-top: 18px; font-size: 12px; color: var(--muted); opacity: 0.55; letter-spacing: 1px; }
+
+  footer { background: #040d17; border-top: 1px solid var(--border); padding: 26px 24px; text-align: center; font-size: 12px; color: var(--muted); letter-spacing: 1px; }
+  footer span { color: var(--gold); }
+
+  /* ─── ANIM ─── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.on { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 640px) {
+    .highlight { padding: 28px; } .h-num { font-size: 72px; }
+    .big-pain-grid { grid-template-columns: 1fr 1fr; }
+    .pain-banner-grid { grid-template-columns: 1fr 1fr; }
+    .pain-stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<div class="hero">
+  <div class="wave-grid"></div>
+  <div class="hero-content">
+    <div class="brand-tag">Daily Loker Pelaut 🇲🇨 &nbsp;·&nbsp; Survey Pelaut Indonesia 2025</div>
+    <h1>APA YANG<br>SEBENARNYA<br>DIRASAKAN<br><em>PELAUT KITA</em></h1>
+    <p class="hero-sub">Ratusan pelaut Indonesia — dari Deck hingga Engine Room — berbicara jujur tentang tantangan karir dan interview mereka.</p>
+    <div class="hero-pain">
+      <span class="pain-chip">😤 Bahasa Inggris jadi tembok</span>
+      <span class="pain-chip t">😔 Gugup saat interview</span>
+      <span class="pain-chip b">🎯 Tidak tahu cara menjawab</span>
+      <span class="pain-chip r">⚓ Susah masuk kapal luar</span>
+    </div>
+    <p class="scroll-hint">↓ Lihat datanya</p>
+  </div>
+</div>
+
+<!-- ══════════ BIG PAIN NUMBERS ══════════ -->
+<div class="pain-banner">
+  <div class="pain-banner-inner">
+    <div class="pain-banner-grid">
+      <div class="pain-stat reveal">
+        <div class="pnum red">66%</div>
+        <div class="ptxt">Pernah Gagal Interview</div>
+        <div class="psub">Sebagian besar lebih dari sekali</div>
+      </div>
+      <div class="pain-stat reveal">
+        <div class="pnum gold">52%</div>
+        <div class="ptxt">Bahasa Inggris Jadi Penghalang</div>
+        <div class="psub">Tantangan #1 saat interview</div>
+      </div>
+      <div class="pain-stat reveal">
+        <div class="pnum teal">60%</div>
+        <div class="ptxt">Pernah Merasa Minder</div>
+        <div class="psub">Dibanding pelaut lain</div>
+      </div>
+      <div class="pain-stat reveal">
+        <div class="pnum" style="color:var(--blue)">84%</div>
+        <div class="ptxt">Tidak Konsisten Latihan</div>
+        <div class="psub">68% kadang · 16% tidak pernah</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 1: TANTANGAN INTERVIEW ══════════ -->
+<div class="wrap reveal">
+  <div class="sec-eyebrow gold">⚓ Tantangan Nyata</div>
+  <h2 class="sec-title">DIMANA PELAUT<br>Indonesia TERSANDUNG</h2>
+  <p class="sec-desc">Dari semua yang pernah menghadapi proses interview, ini masalah yang paling banyak dirasakan — bukan asumsi, tapi data langsung dari mereka.</p>
+
+  <!-- Pain cards -->
+  <div class="big-pain-grid">
+    <div class="big-pain-card" style="--accent: var(--gold);">
+      <span class="icon">🗣️</span>
+      <div class="pct">52%</div>
+      <div class="label">Kesulitan Bahasa Inggris</div>
+      <div class="note">Bahasa Inggris jadi hambatan terbesar — bukan soal tidak tahu jawabannya, tapi tidak bisa mengungkapkannya.</div>
+    </div>
+    <div class="big-pain-card" style="--accent: var(--teal);">
+      <span class="icon">💔</span>
+      <div class="pct">32%</div>
+      <div class="label">Tidak Percaya Diri</div>
+      <div class="note">Sudah tahu materinya, tapi hilang kendali saat duduk di depan interviewer. Mental block nyata.</div>
+    </div>
+    <div class="big-pain-card" style="--accent: var(--blue);">
+      <span class="icon">❓</span>
+      <div class="pct">26%</div>
+      <div class="label">Kurang Pengalaman yang Tepat</div>
+      <div class="note">Bukan tidak punya pengalaman — tapi pengalaman yang dimiliki tidak sesuai dengan yang ditanyakan.</div>
+    </div>
+    <div class="big-pain-card" style="--accent: var(--red);">
+      <span class="icon">😰</span>
+      <div class="pct">18%</div>
+      <div class="label">Mental Down & Gugup</div>
+      <div class="note">Grogi berlebihan yang membuat semua persiapan seolah sia-sia di hari-H interview.</div>
+    </div>
+  </div>
+
+  <!-- Horizontal bar: tantangan all -->
+  <div class="chart-card reveal">
+    <div class="chart-title">🔍 Bagian Tersulit Saat Interview — Lengkap</div>
+    <ul class="hbar-list">
+      <li>
+        <div class="hbar-header"><span>Bahasa Inggris</span><span class="hbar-pct">52%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" data-w="52"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Tidak Percaya Diri</span><span class="hbar-pct">32%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" data-w="32"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Kurang Pengalaman</span><span class="hbar-pct">26%</span></div>
+        <div class="hbar-track"><div class="hbar-fill t" data-w="26"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Mental Down / Gugup</span><span class="hbar-pct">18%</span></div>
+        <div class="hbar-track"><div class="hbar-fill t" data-w="18"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Tidak Tahu Cara Menjawab</span><span class="hbar-pct">15%</span></div>
+        <div class="hbar-track"><div class="hbar-fill b" data-w="15"></div></div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════ QUOTE SECTION ══════════ -->
+<div style="background: var(--bg2); padding: 60px 0;">
+  <div class="wrap tight reveal">
+    <div class="sec-eyebrow teal">💬 Kata Mereka Sendiri</div>
+    <h2 class="sec-title">PELAUT BICARA<br>JUJUR</h2>
+    <p class="sec-desc" style="margin-bottom: 32px;">Sebagian dari mereka akhirnya mau bercerita apa yang sebenarnya mereka rasakan.</p>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <p>"Saya tahu jawabannya, tapi begitu ditanya dalam bahasa Inggris, otak saya langsung blank. Semua yang sudah saya pelajari seolah hilang."</p>
+        <div class="qtag">— 3rd Officer, 3 tahun pengalaman</div>
+      </div>
+      <div class="quote-card">
+        <p>"Sudah gagal interview lebih dari 5 kali. Bukan karena tidak mampu — tapi karena tidak tahu cara menjawab yang benar sesuai ekspektasi interviewer."</p>
+        <div class="qtag">— Engine Rating, kapal lokal</div>
+      </div>
+      <div class="quote-card">
+        <p>"Sering minder lihat pelaut lain yang sudah di kapal luar. Padahal saya punya pengalaman lebih lama. Masalahnya di cara presentasi diri."</p>
+        <div class="qtag">— AB, 5+ tahun pengalaman</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SECTION 2: CARA BELAJAR & SOLUSI ══════════ -->
+<div class="wrap reveal">
+  <div class="sec-eyebrow gold">📚 Perilaku Belajar</div>
+  <h2 class="sec-title">MEREKA INGIN BELAJAR —<br>TAPI CARANYA KURANG TEPAT</h2>
+  <p class="sec-desc">Mayoritas pelaut sudah sadar harus improve, tapi metode yang mereka gunakan belum menjawab kebutuhan nyata mereka.</p>
+
+  <div class="chart-grid">
+    <div class="chart-card reveal">
+      <div class="chart-title">📖 Cara Mereka Improve Sekarang</div>
+      <div class="chart-wrap">
+        <canvas id="improveChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card reveal">
+      <div class="chart-title">🔁 Frekuensi Latihan Interview</div>
+      <div class="chart-wrap">
+        <canvas id="practiceChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Highlight: gap antara niat dan aksi -->
+  <div class="highlight g reveal">
+    <div class="h-num g">84%</div>
+    <div class="h-body">
+      <h3>Ada yang Salah dengan Cara Belajar Mereka</h3>
+      <p>Hampir semua pelaut tahu mereka perlu belajar. Tapi <strong>84% tidak konsisten berlatih</strong> — 68% hanya kadang-kadang, 16% tidak pernah sama sekali. Bukan malas. Mereka tidak punya sistem yang bisa diikuti.</p>
+    </div>
+  </div>
+
+  <!-- Solusi yang diinginkan -->
+  <div class="chart-card wide reveal">
+    <div class="chart-title">🎯 Format yang Paling Mereka Butuhkan</div>
+    <ul class="hbar-list">
+      <li>
+        <div class="hbar-header"><span>Simulasi Interview Langsung</span><span class="hbar-pct">61%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" data-w="61"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Video Training</span><span class="hbar-pct">37%</span></div>
+        <div class="hbar-track"><div class="hbar-fill t" data-w="37"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Coaching Langsung</span><span class="hbar-pct">35%</span></div>
+        <div class="hbar-track"><div class="hbar-fill t" data-w="35"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Buku / E-book Panduan</span><span class="hbar-pct">30%</span></div>
+        <div class="hbar-track"><div class="hbar-fill b" data-w="30"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Template Jawaban Siap Pakai</span><span class="hbar-pct">24%</span></div>
+        <div class="hbar-track"><div class="hbar-fill b" data-w="24"></div></div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ SECTION 3: MARINE ENGINEERS ══════════ -->
+<div class="engine-bg">
+<div class="wrap reveal">
+  <div class="sec-eyebrow teal">⚙️ Marine Engineers</div>
+  <h2 class="sec-title">ENGINEER PUNYA<br>MASALAH YANG SAMA —<br>BAHKAN LEBIH SPESIFIK</h2>
+  <p class="sec-desc">Data dari engineer yang berpartisipasi menunjukkan pola yang konsisten — bahkan lebih tajam dibanding rata-rata semua pelaut.</p>
+
+  <div class="pills">
+    <span class="pill">Engine Rating</span>
+    <span class="pill g">3rd / 4th Engineer</span>
+    <span class="pill">Chief Engineer</span>
+    <span class="pill t">2nd Engineer</span>
+    <span class="pill">Oiler</span>
+    <span class="pill">ETO / ETR</span>
+  </div>
+
+  <!-- Engine big stats -->
+  <div class="big-pain-grid" style="margin-bottom: 40px;">
+    <div class="big-pain-card" style="--accent: var(--red);">
+      <span class="icon">🚫</span>
+      <div class="pct">65%</div>
+      <div class="label">Engineer Pernah Gagal Interview</div>
+      <div class="note">Lebih tinggi dari rata-rata — sekalipun pengalaman teknis mereka tidak diragukan.</div>
+    </div>
+    <div class="big-pain-card" style="--accent: var(--gold);">
+      <span class="icon">🗣️</span>
+      <div class="pct">54%</div>
+      <div class="label">Bahasa Inggris Jadi Penghalang</div>
+      <div class="note">Di atas rata-rata keseluruhan. Tantangan teknis disampaikan dalam bahasa yang tidak dikuasai.</div>
+    </div>
+    <div class="big-pain-card" style="--accent: var(--teal);">
+      <span class="icon">🌏</span>
+      <div class="pct">52%</div>
+      <div class="label">Target Masuk Kapal Luar</div>
+      <div class="note">Lebih dari separuh engineer aktif mengincar overseas company. Tapi gap skill interview masih menghalangi.</div>
+    </div>
+    <div class="big-pain-card" style="--accent: var(--blue);">
+      <span class="icon">😔</span>
+      <div class="pct">60%</div>
+      <div class="label">Pernah Merasa Minder</div>
+      <div class="note">49% mengakui ya, 11% mungkin. Minder bukan soal kemampuan teknis — tapi cara mempresentasikan diri.</div>
+    </div>
+  </div>
+
+  <!-- Engineer tantangan -->
+  <div class="chart-grid">
+    <div class="chart-card reveal">
+      <div class="chart-title">⚙️ Tantangan Interview — Khusus Engineers</div>
+      <ul class="hbar-list">
+        <li>
+          <div class="hbar-header"><span>Bahasa Inggris</span><span class="hbar-pct t">54%</span></div>
+          <div class="hbar-track"><div class="hbar-fill t" data-w="54"></div></div>
+        </li>
+        <li>
+          <div class="hbar-header"><span>Tidak Percaya Diri</span><span class="hbar-pct t">31%</span></div>
+          <div class="hbar-track"><div class="hbar-fill t" data-w="31"></div></div>
+        </li>
+        <li>
+          <div class="hbar-header"><span>Kurang Pengalaman</span><span class="hbar-pct t">24%</span></div>
+          <div class="hbar-track"><div class="hbar-fill b" data-w="24"></div></div>
+        </li>
+        <li>
+          <div class="hbar-header"><span>Mental Down / Gugup</span><span class="hbar-pct t">19%</span></div>
+          <div class="hbar-track"><div class="hbar-fill b" data-w="19"></div></div>
+        </li>
+        <li>
+          <div class="hbar-header"><span>Tidak Tahu Cara Menjawab</span><span class="hbar-pct t">13%</span></div>
+          <div class="hbar-track"><div class="hbar-fill b" data-w="13"></div></div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="chart-card reveal">
+      <div class="chart-title">📅 Profil Pengalaman Engineer</div>
+      <div class="chart-wrap">
+        <canvas id="engineExpChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engineer solusi -->
+  <div class="chart-grid reveal">
+    <div class="chart-card">
+      <div class="chart-title">🎯 Format yang Diinginkan Engineer</div>
+      <div class="chart-wrap">
+        <canvas id="engineSolChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">🌏 Background Kapal Engineer</div>
+      <div class="chart-wrap">
+        <canvas id="engineBgChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engineer highlight -->
+  <div class="highlight t reveal">
+    <div class="h-num t">87%</div>
+    <div class="h-body">
+      <h3>Engineer Tidak Konsisten Berlatih</h3>
+      <p>Hanya <strong>14% engineer yang rutin berlatih interview</strong>. Sisanya 68% hanya kadang-kadang dan 19% tidak pernah sama sekali. Padahal mereka tahu ini penting. Mereka butuh sistem — bukan sekadar motivasi.</p>
+    </div>
+  </div>
+
+  <!-- Engineer latar belakang kerja -->
+  <div class="chart-card reveal">
+    <div class="chart-title">⚓ Dari Mana Mereka Berasal — Lokal vs Overseas</div>
+    <ul class="hbar-list">
+      <li>
+        <div class="hbar-header"><span>Kapal Lokal</span><span class="hbar-pct">63%</span></div>
+        <div class="hbar-track"><div class="hbar-fill" data-w="63"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Overseas</span><span class="hbar-pct t">18%</span></div>
+        <div class="hbar-track"><div class="hbar-fill t" data-w="18"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Keduanya (Lokal + Overseas)</span><span class="hbar-pct t">15%</span></div>
+        <div class="hbar-track"><div class="hbar-fill t" data-w="15"></div></div>
+      </li>
+      <li>
+        <div class="hbar-header"><span>Belum Pernah Berlayar</span><span class="hbar-pct" style="color:var(--red)">4%</span></div>
+        <div class="hbar-track"><div class="hbar-fill r" data-w="4"></div></div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ══════════ CTA ══════════ -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <div class="brand-tag" style="margin-bottom: 28px; justify-content: center; background: rgba(31,184,160,0.08); border-color: rgba(31,184,160,0.2); color: var(--teal);">📣 Survey Masih Berlangsung</div>
+    <h2>SUARAMU JUGA<br>PERLU DIDENGAR</h2>
+    <p>Data ini akan terus kami perbarui. Ajak teman pelautmu untuk mengisi — semakin banyak suara, semakin kuat gambarannya. Gratis, anonim, hanya 3 menit.</p>
+    <a href="https://forms.gle/f7VouuEdy7cKEWHw9" target="_blank" class="cta-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      Isi Survey Sekarang
+    </a>
+    <p class="cta-note">Gratis · Anonim · Hanya 3 menit</p>
+  </div>
+</div>
+
+<footer>
+  © 2025 <span>Daily Loker Pelaut 🇲🇨</span> · Survey Pelaut Indonesia · Data dikumpulkan dari pelaut aktif
+</footer>
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<script>
+Chart.defaults.color = '#7a93ae';
+Chart.defaults.font.family = "'Nunito', sans-serif";
+Chart.defaults.font.size = 12;
+
+const G = '#e8a523', G2 = '#ffd166', T = '#1fb8a0', T2 = '#4dd6c4', B = '#3a9bd5', B2 = '#6ab9e8', R = '#e05c5c', M = '#7a93ae';
+const CARD = '#0f2347';
+
+// Reveal
+const ro = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('on'); ro.unobserve(e.target); } }), { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(r => ro.observe(r));
+
+// Hbars
+const bo = new IntersectionObserver(es => es.forEach(e => {
+  if(e.isIntersecting){
+    e.target.querySelectorAll('.hbar-fill').forEach(b => { b.style.width = b.dataset.w + '%'; });
+    bo.unobserve(e.target);
+  }
+}), { threshold: 0.2 });
+document.querySelectorAll('.chart-card, .hbar-list').forEach(c => bo.observe(c));
+
+// Chart options
+const donut = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: {
+    legend: { position: 'right', labels: { padding: 14, boxWidth: 12, boxHeight: 12 } },
+    tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed}%` } }
+  },
+  cutout: '60%'
+};
+
+const bar = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y}%` } } },
+  scales: { x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: M } }, y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: M } } }
+};
+
+// Cara improve
+new Chart(document.getElementById('improveChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Belajar Sendiri', 'Nonton YouTube', 'Ikut Course', 'Belum Melakukan\nApa-apa'],
+    datasets: [{ data: [50, 29, 14, 4], backgroundColor: [T, B, G, R], borderRadius: 8, borderSkipped: false }]
+  },
+  options: bar
+});
+
+// Frekuensi
+new Chart(document.getElementById('practiceChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Kadang-kadang', 'Tidak Pernah', 'Rutin / Sering'],
+    datasets: [{ data: [68, 16, 16], backgroundColor: [G, R, T], borderColor: CARD, borderWidth: 3 }]
+  },
+  options: donut
+});
+
+// Engine exp
+new Chart(document.getElementById('engineExpChart'), {
+  type: 'bar',
+  data: {
+    labels: ['+10 Thn', '1–3 Thn', '< 1 Thn', '> 5 Thn', '3–5 Thn'],
+    datasets: [{ data: [35, 20, 20, 13, 11], backgroundColor: [G, T, B, '#a78bfa', G2], borderRadius: 8, borderSkipped: false }]
+  },
+  options: { ...bar, plugins: { ...bar.plugins, tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y}% dari engineer` } } } }
+});
+
+// Engine sol
+new Chart(document.getElementById('engineSolChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Simulasi Interview', 'Video Training', 'Coaching', 'Buku / E-book', 'Template Jawaban'],
+    datasets: [{ data: [61, 35, 35, 32, 26], backgroundColor: [T, B, G, '#a78bfa', G2], borderColor: CARD, borderWidth: 3 }]
+  },
+  options: donut
+});
+
+// Engine background
+new Chart(document.getElementById('engineBgChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Kapal Lokal', 'Overseas', 'Lokal + Overseas', 'Belum Pernah'],
+    datasets: [{ data: [63, 18, 15, 4], backgroundColor: [G, T, B, R], borderColor: CARD, borderWidth: 3 }]
+  },
+  options: donut
+});
+</script>
+</body>
+</html>
